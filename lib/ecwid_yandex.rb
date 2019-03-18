@@ -38,6 +38,7 @@ module EcwidYandex
           price = nil
           oldprice = nil
           elem_parent = nil
+          delivery = nil
           elem_child = xml.xpath("//offers//offer[vendorCode='#{ar[0]}']")
 
           if elem_child.count == 0
@@ -58,7 +59,14 @@ module EcwidYandex
               price = child
             when "oldprice"
               oldprice = child
+            when "delivery"
+              delivery = child
             end
+          end
+          unless delivery.nil?
+          delivery.content = "true"
+          else
+            elem_child[0].add_child("<delivery>true</delivery>")
           end
           unless oldprice.nil?
             if price.child.text.to_f > oldprice.child.text.to_f
